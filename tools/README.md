@@ -40,3 +40,47 @@ Example output on raw.pixls.us `8549_OM System - OM-5 Mark II - 16bit (4_3).ORF`
     python tools/findings_index.py --check
 
 All of them use the standard library only (Python 3.8+). Contributions of new tools are welcome. Follow the rules above and RULES.md.
+
+**`v0_spec_check.py`** is an independent, aggregate-only implementation of
+`specs/V0.md` at `bf56d39`, supporting lead #75. Original payload logic and
+synthetic tests were written without target files, reference code, or output
+hashes. Shared container code is limited to `orf_signature.Tiff` header/endian
+and integer reads; an original wrapper validates relevant IFD descriptors.
+
+    python -I tools/v0_spec_check.py --help
+    python -I tools/v0_spec_check.py --self-test
+    python -I tools/test_v0_spec_check.py
+    python -I tools/v0_spec_check.py --measured-by @yourhandle --sample ID PUBLIC_NAME path/to/file.ORF
+
+Repeat `--sample` for multiple files. IDs are distinct positive decimals; public
+names may repeat. Match records by input SHA-256, never basename. Check CC0
+licensing before supplying downloaded files. Each JSONL result includes public
+identity, input/output hashes, measured signature, aggregates, selectors, source
+hashes and pinned spec metadata. Failures emit sanitized categories, preserve
+other results and return a nonzero exit code. No decoded data is written.
+
+Selectors are **unverified spec generalizations**: packed-12 `IIRS` is plain,
+`IIRO` reverses global four-byte words; no strip gaps means natural rows; one
+packed-12 gap at the even-field boundary means two fields; packed-16 uses TIFF
+byte order. Unsupported cases fail without trying alternatives. First/second
+unit order is a convention, not physical pixel-order proof. The S4.3/S6 wording
+ambiguity is resolved by preserving packed-16 stored words with **no numeric
+shift**, including low nibbles. Above-4095 and nonzero-low-nibble counts are
+separate measurements. Hashing uses explicit uint16 little-endian image rows.
+
+Read-only mmap, individual strip reads, strict integer size classification and
+row streaming are bounded by 8 GiB per file, 100,000 per dimension, 250,000,000
+pixels, 4,096 IFDs and 1,000,000 strips. Malformed relevant fields, tied largest
+IFDs, repeated pointers, overlaps, nonascending strips and unsupported gaps are
+rejected. Report mismatches under these frozen assumptions; do not tune them to
+expected hashes.
+
+Input opening requires `os.O_NONBLOCK`: the acquired descriptor is checked with
+`fstat` before any mmap/read, so a FIFO without a writer is rejected promptly and
+later inputs still run. Descriptors close on success and failure. Platforms
+without that flag fail explicitly per sample with `nonblocking_open_unavailable`;
+regular-file decoding therefore requires nonblocking descriptor-open support.
+This restriction is included in provenance and help. There is no path-check/open
+fallback with a race. Symlinks to regular files remain usable. `--help` and
+`--self-test` remain portable; FIFO and regular-file measurement tests skip when
+the required platform facilities are absent, while the fail-closed mock still runs.
