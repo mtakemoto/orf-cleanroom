@@ -1,0 +1,22 @@
+{
+  "design_id": "lead31-suffix-matches-v1",
+  "design_sha256": "e37e9678da83bf61c8fa3af4652bafed156d767b048893f46bed8a42dd1c7ee9",
+  "phase": "validation",
+  "samples": [
+    {
+      "id": 3573,
+      "name": "Olympus - E-M5 Mark III - 16bit (4:3).ORF",
+      "sha256": "391f2f6ba712a517212cae53bfc9a313fc4d106d0b04d3b9af68a4ed2d5d944e"
+    },
+    {
+      "id": 3970,
+      "name": "Olympus - E-PL10 - 16bit (4:3).ORF",
+      "sha256": "6911f11810545cc2c55882ef6fa6aa2f25d34674865f8ade15e47990865e37ed"
+    },
+    {
+      "id": 4126,
+      "name": "Olympus - E-M10 Mark IV - 16bit (4:3).ORF",
+      "sha256": "ce03e936cb2e8131343e7045a3249f78477bd2ae944e121ace72058b89fef509"
+    }
+  ]
+}

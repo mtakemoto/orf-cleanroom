@@ -10,6 +10,17 @@ Each script should:
 
 ## Example tools
 
+**`suffix_match_probe.py`** supports lead #31 with exact suffix-equality counts
+against independent within-block permutations that preserve escape positions.
+It prints aggregate JSON, with every declared lag and explicit sample failures.
+The frozen discovery and validation cohorts are in `tools/cohorts/`; later files
+use a separate `replication` cohort with the same design metadata. Local paths
+are supplied separately and never appear in output. This bounded descriptive
+measure cannot establish or exclude dictionary coding. Synthetic exhaustive
+permutation tests run with `python -I tools/suffix_match_probe.py --self-test`.
+
+    python -I tools/suffix_match_probe.py --cohort PUBLIC_COHORT.json --measured-by @yourhandle --sample ID path/to/file.ORF
+
 **`pixls_samples.py`** lists, checks and downloads raw.pixls.us Olympus/OM samples using the site's licence listing. It downloads CC0 files only and verifies SHA-256. See the top-level README.
 
 **`manifest_rows.py`** turns local CC0 files into ready-made `samples/manifest.csv` rows, combining the licence listing with `orf_signature.py`.
