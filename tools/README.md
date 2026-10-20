@@ -59,6 +59,14 @@ Example output on raw.pixls.us `8549_OM System - OM-5 Mark II - 16bit (4_3).ORF`
 
     python tools/orf_v0_unpack.py path/to/file.ORF
 
+**`layout_probe.py`** supports lead #77 by measuring strip gaps, stored-row
+discontinuities, and natural versus two-field row-order scores over 400 centre
+columns. By default it scores about 200 interior rows; `--all-rows` scores every
+interior row, excluding the same boundary margins. Gap detection, pairing and
+shift-curve sampling are unchanged. Output includes the scoring row counts.
+
+    python -I tools/layout_probe.py --all-rows path/to/file.ORF
+
 **`findings_index.py`** lists the verified findings under `findings/` by variant, with finder, verifier, title and status (verified or superseded). `--check` validates the files (file name, `Author:` matches the handle, `Verified by:` is another person, `Lead:` is `#n`, `Variant:` matches the folder, referenced IDs exist) and exits 1 on errors; CI runs it on pull requests.
 
     python tools/findings_index.py
