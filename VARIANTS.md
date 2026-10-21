@@ -44,5 +44,6 @@ Leads are labelled `variant:Vn` ([V0](https://github.com/radialmonster/orf-clean
 
 ## Unassigned
 - Findings whose variant isn't known yet: [findings/unassigned/](findings/unassigned/). Container facts that span variants: [findings/container/](findings/container/).
+- Shared terminal-bit counts are independently reproduced for the frozen compressed cohort in finding `2026-10-21--radialmonster--compressed-tail-full-cohort-reproduction` (Partial for #87; [V1.md](specs/V1.md) S1.7). They do not assign any manifest row to V1, V2 or another variant, or establish padding.
 - High Res Shot / pixel-shift files: two of the 21 in the manifest (PEN-F, E-M5 Mark II) are packed-12.8, so V0 by signature; the other 19 are compressed and still `unassigned`. Whether the mode needs its own variants is open (hypothesis H2, [specs/V0.md](specs/V0.md) G5, which applies to both).
 - ORI files: not yet classified.
