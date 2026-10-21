@@ -9,6 +9,8 @@ Handles the exact fixed-size payloads of VARIANTS.md V0:
   packed-12    verified (findings/V0/2026-10-19--radialmonster--packed-12-msb-two-values-per-three-bytes)
   packed-12.8  verified (findings/V0/2026-10-20--radialmonster--packed-12-8-groups-of-ten-values)
   packed-16    UNVERIFIED (lead #71)
+Two-field row-layout evidence is verified on the measured cohort (F_ROWLAYOUT,
+partial verification of lead #77); general layout selection remains unverified.
 Compressed payloads (V1, V2, ...) are detected and reported as "not yet specified".
 
 Output is aggregate numbers only. This program has no file output at all: the
@@ -38,6 +40,7 @@ import orf_signature  # noqa: E402
 F_PACKED12 = "2026-10-19--radialmonster--packed-12-msb-two-values-per-three-bytes"
 F_PACKED128 = "2026-10-20--radialmonster--packed-12-8-groups-of-ten-values"
 F_FIXED = "2026-10-19--radialmonster--fixed-size-payloads-exact-else-compressed"
+F_ROWLAYOUT = "2026-10-21--radialmonster--two-field-row-layout-reproduction"
 
 # what the evidence is for each layout
 STATUS = {
@@ -53,7 +56,7 @@ ORDERS = {
 }
 
 
-LAYOUTS = ("natural", "two-field")      # row layout: stored row order (lead #77)
+LAYOUTS = ("natural", "two-field")      # measured cohort: F_ROWLAYOUT; general selector unverified
 
 
 class NotSpecified(Exception):
@@ -191,16 +194,16 @@ def detect_order(f, p, packing, w, h, rb):
 
 
 def stored_row(y, h, layout):
-    """Stored row holding image row y. natural: y. two-field (lead #77): stored rows 0..n1-1 are the
-    even image rows, n1..h-1 the odd ones, n1 = ceil(h/2)."""
+    """Stored row holding image row y. natural: y. two-field (F_ROWLAYOUT, partial #77):
+    stored rows 0..n1-1 are even image rows, n1..h-1 odd ones, n1 = ceil(h/2)."""
     if layout == "natural":
         return y
     return y // 2 if y % 2 == 0 else (h + 1) // 2 + y // 2
 
 
 def detect_layout(f, p, packing, order, w, h, rb):
-    """Row layout from the stored rows themselves (lead #77): the mean absolute difference of
-    stored rows 1 apart against 2 apart, on 3 bands x 8 rows x up to 400 centre columns. Rows of
+    """Row-layout heuristic (general selector still unverified; cohort evidence: F_ROWLAYOUT):
+    mean absolute difference of stored rows 1 apart against 2 apart, on 3 bands x 8 rows x up to 400 centre columns. Rows of
     one CFA colour are 2 apart in the image, so natural order has the 2-apart rows closer;
     two-field order has the 1-apart stored rows closer. Returns (layout, margin), margin =
     larger / smaller of the two sums. Ties go to natural."""
@@ -284,7 +287,7 @@ def decode_file(path, order=None, layout=None):
     else:
         r["notes"].append("pixel order inside a two-pixel unit is undecided by the evidence")
     if layout == "two-field":
-        r["notes"].append("rows are stored as two fields (even image rows, then odd rows; lead #77); layout is UNVERIFIED")
+        r["notes"].append("rows are stored as two fields (even image rows, then odd rows); cohort evidence verified (%s, partial); general layout selection remains UNVERIFIED" % F_ROWLAYOUT)
     if packing == "packed-16":
         r["notes"].append("values are the stored 16-bit words (not shifted); out_of_range counts words with a low-4-bit set")
     return r
