@@ -254,8 +254,10 @@ def decode_file(path, order=None, layout=None):
         # specify neither tokens nor padding.
         # F_BRIDGE_RANGE corrects the six-file Partial suffix-only evidence range;
         # it establishes no value assembly or compressed decode step (V1 S1.9).
+        # 2026-10-21--radialmonster--em1mk2-full-payload-suffix-dependence
+        # (Partial for #11) measures sequential association, not values or a predictor.
         r.update(variant="compressed", status="not yet specified (value assembly remains open)")
-        r["notes"].append("compressed payload (%s bits per pixel); no decoder or padding rule is specified yet, see specs/V1.md S1.7-S1.8 and ROADMAP.md" % sig["bpp"])
+        r["notes"].append("compressed payload (%s bits per pixel); no decoder or padding rule is specified yet; suffix associations do not specify values, see specs/V1.md S1.2, S1.7-S1.8 and ROADMAP.md" % sig["bpp"])
         return r
     packing = sc
     r.update(variant="V0", packing=packing, status=STATUS[packing])
