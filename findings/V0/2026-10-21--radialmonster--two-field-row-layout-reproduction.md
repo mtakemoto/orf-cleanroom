@@ -98,10 +98,10 @@ All three measurement runs exited zero, with no stderr or failed/excluded inputs
 
 ## Reproduce
 
-Fetch the separate tool branch and select its frozen commit:
+Fetch the separate tool contribution through upstream PR #122 and select its frozen measurement commit:
 
 ```sh
-git fetch https://github.com/mtakemoto/orf-cleanroom.git tools/lead-77-all-rows
+git fetch origin refs/pull/122/head
 git checkout --detach fe4ec45712ed656528a254324dd515424b5268de
 python -I tools/layout_probe.py --help
 ```
