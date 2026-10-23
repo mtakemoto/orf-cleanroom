@@ -232,6 +232,17 @@ permutation tests run with `python -I tools/suffix_match_probe.py --self-test`.
 
     python -I tools/suffix_match_probe.py --cohort PUBLIC_COHORT.json --measured-by @yourhandle --sample ID path/to/file.ORF
 
+**`code_family_screen.py`** supports lead #339. It screens a payload for standard containers
+(magic counts; zlib, raw DEFLATE, gzip, bzip2 and lzma/xz decompression at the first byte offsets,
+output capped, each hit marked complete or partial from the decompressor's end-of-stream state),
+measures recompressibility, and parses the whole payload with Rice (k 0..8, both stop bits),
+Exp-Golomb (0..6), Elias gamma/delta and Fibonacci codes, reporting prefix and whole-payload consumed
+bits and completed codewords separately. `--shuffle` runs the same tests on shuffled payload bytes.
+The screen is bounded and descriptive: it cannot exclude other framings, parameters or hybrid coders.
+
+    python -I -B tools/code_family_screen.py path/to/file.ORF [--shuffle]
+    python -I -B tools/test_code_family_screen.py
+
 **`pixls_samples.py`** lists, checks and downloads raw.pixls.us Olympus/OM samples using the site's licence listing. It downloads CC0 files only and verifies SHA-256. See the top-level README.
 
 **`manifest_rows.py`** turns local CC0 files into ready-made `samples/manifest.csv` rows, combining the licence listing with `orf_signature.py`.
