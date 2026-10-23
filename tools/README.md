@@ -243,6 +243,16 @@ The screen is bounded and descriptive: it cannot exclude other framings, paramet
     python -I -B tools/code_family_screen.py path/to/file.ORF [--shuffle]
     python -I -B tools/test_code_family_screen.py
 
+**`bayer_grid_probe.py`** supports lead #338. On the candidate k=5 parse it counts suffix
+equality on the lag lattice `dy*W + dx` (dy 0..3, dx -4..4) over a token prefix, next to one fixed
+shuffle that permutes ordinary suffixes within W-token blocks (escape positions kept). It also reports
+whole-payload token and residual-bit counts, the positions of large-q tokens, and (row % 2, col % 2)
+tables of the most common tokens for chosen row windows. Token index -> (row, col) uses W from the
+TIFF tags; that is a coordinate choice, not an established pixel map or CFA phase.
+
+    python -I -B tools/bayer_grid_probe.py path/to/file.ORF
+    python -I -B tools/test_bayer_grid_probe.py
+
 **`pixls_samples.py`** lists, checks and downloads raw.pixls.us Olympus/OM samples using the site's licence listing. It downloads CC0 files only and verifies SHA-256. See the top-level README.
 
 **`manifest_rows.py`** turns local CC0 files into ready-made `samples/manifest.csv` rows, combining the licence listing with `orf_signature.py`.
